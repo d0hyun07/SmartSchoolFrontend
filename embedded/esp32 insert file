@@ -1,0 +1,103 @@
+#include <Arduino.h>
+#include <WiFi.h>
+#include <Firebase_ESP_Client.h>
+#include <addons/TokenHelper.h>
+#include <addons/RTDBHelper.h>
+
+#include <DHT.h>
+
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+
+#define WIFI_SSID "bssm_free"
+#define WIFI_PASSWORD "bssm_free"
+
+#define API_KEY "AIzaSyD_OVBu1vG6CKvtFprxu6qZrfyb563N4FY"
+#define DATABASE_URL "smartplant-42fd1-default-rtdb.firebaseio.com/"
+
+#define PIN_DHT1 27
+#define PIN_DHT2 33
+#define PIN_DHT3 32
+
+#define Soil_Moisture_pin 36
+
+#define Dust_Pin 4
+
+DHT DHT1(PIN_DHT1, DHT11);
+DHT DHT2(PIN_DHT2, DHT11);
+DHT DHT3(PIN_DHT3, DHT11);
+
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+
+Adafruit_MPU6050 mpu;
+
+long long duration;
+long long starttime;
+long long lowpulseoccupancy = 0;
+float concentration = 0;
+float ugm3 = 0;
+
+void setup(){
+    Serial.begin(115200);
+    DHT1.begin();
+    DHT2.begin();
+    DHT3.begin();
+    mpu.begin();
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+    Serial.print("Connecting to Wi-Fi");
+    while (WiFi.status() != WL_CONNECTED){
+        Serial.print(".");
+        delay(300);
+    }
+    Serial.println();
+    Serial.print("Connected with IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.println();
+
+    config.api_key = API_KEY;
+    config.database_url = DATABASE_URL;
+    Firebase.signUp(&config, &auth, "", "");
+    config.token_status_callback = tokenStatusCallback;
+    Firebase.begin(&config, &auth);
+    Firebase.reconnectWiFi(true);
+    pinMode(Dust_Pin, INPUT);
+    starttime = millis();
+}
+
+void loop(){
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+
+    float DHT1_humidity = DHT1.readHumidity();
+    float DHT1_temperature = DHT1.readTemperature();
+    float DHT2_humidity = DHT2.readHumidity();
+    float DHT2_temperature = DHT2.readTemperature();
+    float DHT3_humidity = DHT3.readHumidity();
+    float DHT3_temperature = DHT3.readTemperature();
+    int Soil_Moisture = analogRead(Soil_Moisture_pin);
+
+    duration = pulseIn(DustPin, LOW);
+    lowpulseoccupancy += duration;
+    concentration = 1.1 * pow(lowpulseoccupancy / 300000, 3) - 3.8 * pow(lowpulseoccupancy / 300000, 2) + 520 * lowpulseoccupancy / 300000 + 0.62;
+    ugm3 = concentration * 100 / 13000;
+    lowpulseoccupancy = 0;
+    starttime = millis();
+
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/SoilMoisture", Soil_Moisture);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/DHT/humidity1", DHT1_humidity);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/DHT/humidity2", DHT2_humidity);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/DHT/humidity3", DHT3_humidity);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/DHT/temperature1", DHT1_temperature);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/DHT/temperature2", DHT2_temperature);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/DHT/temperature3", DHT3_temperature);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/GYRO/GX", g.gyro.x);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/GYRO/GY", g.gyro.y);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/GYRO/GZ", g.gyro.z);
+    Firebase.RTDB.setInt(&fbdo, "SmartPlant/FineDust", ugm3);
+    delay(1000);
+}
