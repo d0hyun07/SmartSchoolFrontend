@@ -1,0 +1,56 @@
+@font-face {
+  font-family: "cookie";
+  src: url("../font/CookieRunBold.otf");
+}
+
+body {
+  font-family: "cookie";
+  background-color: #ece8e5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.title {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.register-button {
+  font-size: 69px;
+  padding: 10px 20px;
+  color: #545454;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: #ece8e5;
+}
+.board-container {
+  display: flex;
+}
+
+.board-box {
+  width: 350px;
+  height: 200px;
+  background-color: #6eac5c;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 30px;
+}
+
+.plant-name {
+  font-weight: bold;
+}
+
+.plant-species {
+  color: #888888;
+}
+
+.PlantBox {
+  display: flex;
+}

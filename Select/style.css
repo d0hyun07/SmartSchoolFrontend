@@ -1,0 +1,73 @@
+@font-face {
+  font-family: "cookie";
+  src: url("../font/CookieRunBold.otf");
+}
+
+body {
+  font-family: "cookie";
+  background-color: #ece8e5;
+  margin: 0;
+  padding: 0;
+}
+
+.MainBox {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 100px;
+}
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.inputBox {
+  border-radius: 10px;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  padding: 8px;
+  border: 0px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.addButton {
+  margin: 0 auto;
+  display: block;
+  width: 60%;
+  padding: 10px;
+  background-color: #6eac5c;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.returnButton {
+  margin: 0 auto;
+  margin-top: 30px;
+  display: block;
+  width: 40%;
+  padding: 10px;
+  background-color: #6eac5c;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+button:hover {
+  background-color: #45a049;
+}

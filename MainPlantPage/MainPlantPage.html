@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="image-container">
+        <!-- 이미지를 표시할 요소 -->
+        <img id="img1" src="" alt="" />
+      </div>
+      <div class="data-container">
+        <div class="data-item">
+          <h3>토양습도</h3>
+          <!-- 토양습도 데이터를 표시할 요소 -->
+          <div id="soi"></div>
+          <div id="warning1"></div>
+        </div>
+        <div class="data-item">
+          <h3>미세먼지</h3>
+          <!-- 미세먼지 데이터를 표시할 요소 -->
+          <div id="finedust"></div>
+        </div>
+        <div class="data-item">
+          <h3>온도</h3>
+          <!-- 온도 데이터를 표시할 요소 -->
+          <div id="tem"></div>
+          <div id="warning2"></div>
+        </div>
+        <div class="data-item">
+          <h3>습도</h3>
+          <!-- 습도 데이터를 표시할 요소 -->
+          <div id="hum"></div>
+          <div id="warning3"></div>
+        </div>
+        <div class="data-item">
+          <h3>넘어짐?</h3>
+          <!-- 꽃이 넘어졌는지를 표시할 요소 -->
+          <div id="fall"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
+  <script src="./script.js"></script>
+</html>
